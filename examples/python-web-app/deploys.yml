@@ -14,8 +14,22 @@ spec:
       labels:
         app: python
     spec:
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: dd-secret
       containers:
       - name: python-app
         image: syed0071/python-sample-app:v1
+        env:
+         - name: DB-PORT
+           valueFrom:
+            configMapKeyRef:
+                  name: db-details 
+                  key: db-port
+        volumeMounts:
+           - name: secret-volume
+             readOnly: true
+             mountPath: "/opt"
         ports:
         - containerPort: 8000
